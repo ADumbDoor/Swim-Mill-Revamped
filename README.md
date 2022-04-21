@@ -103,11 +103,11 @@ Pointers - A pointer is only an address, on its own it does not contain any info
  - myPointer[index]
  - myPointer->someValue (this is mostly seen with structs)
 
-Arrays - Arrays in C/C++ exist in two forms. Either pre-allocated, or dynamic. You may reassign individual values within pre-allocated arrays, but if you try to assign directly to a pre-allocated array, your program will in the best case either not compile or crash, and worst case will perform undefined behavior. Dynamic memory can be reassigned to, but you risk memory leaks if you do not [Free](https://man7.org/linux/man-pages/man3/free.3p.html) your memory.
+Arrays - Arrays in C/C++ exist in two forms. Either pre-allocated, or dynamic. You may reassign individual values within pre-allocated arrays, but if you try to assign directly to a pre-allocated array, your program will in the best case either not compile or crash, and worst case will perform undefined behavior. Dynamic memory can be reassigned to, but you risk memory leaks if you do not [free](https://man7.org/linux/man-pages/man3/free.3p.html) your memory.
 Pre-allocated arrays:
  - int myArr[10];
 Dynamically allocated arrays:
- - int myArr = malloc(sizeof(int) * 10);
+ - int *myArr = malloc(sizeof(int) * 10);
 
 [printf](https://man7.org/linux/man-pages/man3/printf.3.html) - This prints to the terminal by default. It uses string substitutions with %'s to format your string. It will look something like this:
 printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, someInt, somePointer, someChar);
