@@ -27,11 +27,11 @@ Firstly, I should be able to terminate your program at any time *_gracefully_* b
 Secondly, your program should end on its own after 30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
 
 Just printing text descriptions of what's happening is boring. For full credit, print an actual swim mill to the screen. While it is not necessary to implement it *exactly* like this, it should resemble this sort of visual design:
-`----------`
-`-----*----`
-`----------`
-`--*-------`
-`-----F----`
++ `----------`
++ `-----*----`
++ `----------`
++ `--*-------`
++ `-----F----`
 
 Your swim mill must also spawn at least 18 pellet processes that run concurrently.
 
@@ -61,21 +61,21 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 ## Timeline
 
 While once again, this is not graded, you will be on-track if you adhere to the following timeline.
-Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
-Week 2: All three processes should be able to access shared memory and communicate any information to each other. Ensure that you're using fork and exec properly. You should also be able to spawn all of the required processes at this point.
-Week 3: You should have figured out what kind of information you need to pass between processes, and have a working implementation of that communication.
-Week 4: You should be able to print a visual representation of your swim mill, all processes should be able to read and write in shared memory, and all of the remaining requirements should be met.
++ Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
++ Week 2: All three processes should be able to access shared memory and communicate any information to each other. Ensure that you're using fork and exec properly. You should also be able to spawn all of the required processes at this point.
++ Week 3: You should have figured out what kind of information you need to pass between processes, and have a working implementation of that communication.
++ Week 4: You should be able to print a visual representation of your swim mill, all processes should be able to read and write in shared memory, and all of the remaining requirements should be met.
 
 
 ## Grading scale:
 ### If the code is not commented, there is no makefile, there are no commits to github, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum three source files.
 
-10% - Your code compiles and runs
-20% - You created shared memory correctly, and each of your processes is able to read from and write to the shared memory
-20% - You created at least 20 total processes
-15% - You print the grid correctly and output pellet information correctly
-20% - The program ends after 30 seconds, and can be interrupted with a signal interrupt
-15% - The program cleans up after itself, not leaving any shared memory behind
++ 10% - Your code compiles and runs
++ 20% - You created shared memory correctly, and each of your processes is able to read from and write to the shared memory
++ 20% - You created at least 20 total processes
++ 15% - You print the grid correctly and output pellet information correctly
++ 20% - The program ends after 30 seconds, and can be interrupted with a signal interrupt
++ 15% - The program cleans up after itself, not leaving any shared memory behind
 
 Partial credit may be given based on degree of success for any of the above
 
