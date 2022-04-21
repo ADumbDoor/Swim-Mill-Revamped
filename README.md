@@ -6,9 +6,12 @@
 The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html), become familiarized with man pages, and improve your ability to work with low-level operating system commands.
 
 You will write a program that consists of three entirely separate executables:
-	1. A swim mill
-	2. A fish
-	3. A pellet
+
+1. A swim mill
+
+2. A fish
+
+3. A pellet
 
 The `swim mill` keeps track of all of the proceses, launches all of them, and is in charge of ending the program after 30 seconds.
 
