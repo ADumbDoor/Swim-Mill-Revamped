@@ -11,10 +11,12 @@ You will write a program that consists of three entirely separate executables:
 	3. A pellet
 
 The `swim mill` keeps track of all of the proceses, launches all of them, and is in charge of ending the program after 30 seconds.
+
 The `fish` exists on the bottom row of the swim mill and only moves left and right. It constantly tries to find a pellet, and when it sees one that it believes it can reach, it will try to sit under that pellet until the pellet reaches the fish. If the fish eats a pellet, that pellet is removed from the swim mill. If the fish eats a pellet, please print the pellet's pid to stderr along with an appropriate message. If the fish does not see any pellets, it will sit idly in the center of the bottom row, waiting for pellets.
+
 The `pellet` spawns at a random X and Y location in the swim mill. Every tick, it goes down one unit. If it reaches the bottom of the swim mill, it is removed from the swim mill. Print an appropriate message to stderr with the pellet's pid. You may choose to respawn the pellet after an arbitrary amount of time has passed from it being eaten or reaching the bottom of the swim mill.
 
-HINT: If you have only one .c file, and not at least three, you will need to change your paradigm by the end.
+ * HINT: If you have only one .c file, and not at least three, you will need to change your paradigm by the end.
 
 In addition, you will create a working Makefile, both for my convenience and your own. Ideally you should only type your cc/gcc commands ONCE for this entire project. After that, you should only need to type "make" into your console to compile all three executables.
 
