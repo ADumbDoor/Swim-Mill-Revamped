@@ -112,7 +112,8 @@ Dynamically allocated arrays:
  - int *myArr = malloc(sizeof(int) * 10);
 
 [printf](https://man7.org/linux/man-pages/man3/printf.3.html) - This prints to the terminal by default. It uses string substitutions with %'s to format your string. It will look something like this:
-printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, someInt, somePointer, someChar);
+
+`printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, someInt, somePointer, someChar);`
 
 
 ## Recommendations:
