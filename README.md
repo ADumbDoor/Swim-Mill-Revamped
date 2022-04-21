@@ -13,7 +13,7 @@ You will write a program that consists of three entirely separate executables:
 
 3. A pellet
 
-The `swim mill` keeps track of all of the proceses, launches all of them, and is in charge of ending the program after 30 seconds.
+The `swim mill` keeps track of all of the processes, launches all of them, and is in charge of ending the program after 30 seconds.
 
 The `fish` exists on the bottom row of the swim mill and only moves left and right. It constantly tries to find a pellet, and when it sees one that it believes it can reach, it will try to sit under that pellet until the pellet reaches the fish. If the fish eats a pellet, that pellet is removed from the swim mill. If the fish eats a pellet, please print the pellet's pid to stderr along with an appropriate message. If the fish does not see any pellets, it will sit idly in the center of the bottom row, waiting for pellets.
 
@@ -121,6 +121,8 @@ Dynamically allocated arrays:
  - Do not put your entire swim mill character array in shared memory. There are plenty of implementations that are acceptable, but this is not one of them.
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
  - While you can have all of these processes run without breaks, it won't lead to very interesting results. It might be worth experimenting with [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html) or [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html) to see what would make your swim mill look more animated. (Think like a game, and frame rates).
+ - Really put some thought into what you might need to pass as information between processes. Try to think in terms of minimalism here. What is the BARE MINIMUM information my fish needs to know about a pellet to act? Where in my shared memory segment should I put a fish? A pellet? 10 pellets? Etc.
+ - If you're having trouble using [srand](https://man7.org/linux/man-pages/man3/srand.3p.html) and [rand](https://man7.org/linux/man-pages/man3/rand.3.html) with multiple processes, meditate upon the following: How much time passes between processes being launched, and how can we introduce additional entry to our random seed?
 
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
@@ -129,6 +131,11 @@ Dynamically allocated arrays:
 - [kill](https://man7.org/linux/man-pages/man1/kill.1.html) - for if you find an errant process running
 - [ipcs](https://man7.org/linux/man-pages/man1/ipcs.1.html) - to check for any shared memory not freed
 - [ipcrm](https://man7.org/linux/man-pages/man1/ipcrm.1.html) - to clear any shared memory left after running your program
+### Useful information if you get stuck:
+- In order to compile on Unix/Linux machines, you may need to specify some compiler flags. Specifically -lrt needs to be near/at the end of your compile command for working with shared memory.
+- It's worth checking that you have included any headers that you need at the top of your source files.
+- Order of function definitions matters in C. You can get around this, however, by *declaring* functions before using them. [More on that here](https://en.cppreference.com/w/c/language/functions). This is where a header file might come in handy.
+
 
  # previous content
 
