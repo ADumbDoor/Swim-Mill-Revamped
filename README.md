@@ -116,7 +116,7 @@ printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, som
 
  # this existed before my edits
 
- #this is left for comparison only
+ # this is left for comparison only
 
 
 
