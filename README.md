@@ -124,10 +124,12 @@ Dynamically allocated arrays:
 
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
-- [touch](https://man7.org/linux/man-pages/man1/touch.1.html)
-- 
+- [touch](https://man7.org/linux/man-pages/man1/touch.1.html) - to create your files
+- [top](https://man7.org/linux/man-pages/man1/top.1.html) - for if you want to see if any errant processes are still running
+- [kill](https://man7.org/linux/man-pages/man1/kill.1.html) - for if you find an errant process running
+- [ipcs](https://man7.org/linux/man-pages/man1/ipcs.1.html) - to check for any shared memory not freed
+- [ipcrm](https://man7.org/linux/man-pages/man1/ipcrm.1.html) - to clear any shared memory left after running your program
 
- 
  # previous content
 
  # this existed before my edits
