@@ -17,16 +17,16 @@ The `swim mill` keeps track of all of the proceses, launches all of them, and is
 
 The `fish` exists on the bottom row of the swim mill and only moves left and right. It constantly tries to find a pellet, and when it sees one that it believes it can reach, it will try to sit under that pellet until the pellet reaches the fish. If the fish eats a pellet, that pellet is removed from the swim mill. If the fish eats a pellet, please print the pellet's pid to stderr along with an appropriate message. If the fish does not see any pellets, it will sit idly in the center of the bottom row, waiting for pellets.
 
-The `pellet` spawns at a random X and Y location in the swim mill. Every tick, it goes down one unit. If it reaches the bottom of the swim mill, it is removed from the swim mill. Print an appropriate message to stderr with the pellet's pid. You may choose to respawn the pellet after an arbitrary amount of time has passed from it being eaten or reaching the bottom of the swim mill.
+The `pellet` spawns at a random X and Y location in the swim mill (Although never on the same row as the fish). Every tick, it goes down one unit. If it reaches the bottom of the swim mill, it is removed from the swim mill. Print an appropriate message to stderr with the pellet's pid. You may choose to respawn the pellet after an arbitrary amount of time has passed from it being eaten or reaching the bottom of the swim mill.
 
  * HINT: If you have only one .c file, and not at least three, you will need to change your paradigm by the end.
 
-In addition, you will create a working Makefile, both for my convenience and your own. Ideally you should only type your cc/gcc commands ONCE for this entire project. After that, you should only need to type "make" into your console to compile all three executables.
+In addition, you will create a working makefile, both for my convenience and your own. Ideally you should only type your cc/gcc commands ONCE for this entire project, and only inside of your makefile. After that, you should only need to type "make" into your console to compile all three executables.
 
-Your different executables (processes) when run will all communicate important information about their states to each other. Our means of communcation will be through a segment of shared memory. Bear in mind that if you do this assignment properly, you will only run ONE of these executables from the terminal, and it will launch all of your other processes.
+Your different executables (processes) when run will all communicate important information about their states to each other. Our means of communication will be through a segment of shared memory. Bear in mind that if you do this assignment properly, you will only run ONE of these executables from the terminal, and it will launch all of your other processes.
 
 In order to have all of your processes run concurrently, you will need to be able to both [launch](https://man7.org/linux/man-pages/man3/exec.3.html) and [kill](https://www.man7.org/linux/man-pages/man1/kill.1.html) all of them. To do this, you will need to set up a few things:
- - I should be able to terminate your program at any time *_gracefully_* by sending an [interrupt](https://man7.org/linux/man-pages/man3/siginterrupt.3.html) to your program. (Command/Ctrl + C on most computers, this will appear as a ^C in a terminal).
+ - I should be able to terminate your program at any time *_gracefully_* by sending an [interrupt](https://man7.org/linux/man-pages/man3/siginterrupt.3.html) to your program. (Command/Ctrl + C on most computers, this will appear as a ^C in a terminal). I do recommend leaving this step for last, however, as until your program is able to handle interrupts cleanly, interrupting in this way may lead to unintended and possibly unpleasant results (Namely, unclean memory, or processes still running in the background).
  - Your program should end on its own after 30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
 
 Just printing text descriptions of what's happening is boring. For full credit, print an actual swim mill to the screen. While it is not necessary to implement it *exactly* like this, it should resemble this sort of visual design:
@@ -46,7 +46,7 @@ Your swim mill must also spawn at least 18 pellet processes that run concurrentl
 ## What you need to know to succeed
 
 Please read at a *MINIMUM* the following pages. You don't need to be meticulous about your reading, but at a minimum read the information that seems important, and be familiar with the pages. Then, answer the following questions. This is not graded, but knowing the answers to these questions will help you immensely when you actually start to code this assignment:
-1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description)
+1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description. You may either use the POSIX shared memory implementation, or the [System V](https://man7.org/linux/man-pages/man2/shmget.2.html) implementation. If you choose to use the System V implementation, please read the pages linked in the [SEE ALSO](https://man7.org/linux/man-pages/man2/shmget.2.html#SEE_ALSO) section of [shmget](https://man7.org/linux/man-pages/man2/shmget.2.html).)
 
 2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
 
@@ -54,16 +54,16 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 
 4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead)
 
-5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that are called by your first make rule.)
+5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that are called by your first make rule. [More on that here.](https://makefiletutorial.com/#targets))
 
 ### questions you should answer: 
 * Q1. In what order should you perform the actions to create [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html)? (HINT: A minimum of three functions must be used the first time you create shared memory)
 
 * Q2. What is the return type of mmap, and what can you do with it? (If you are unfamiliar with C/C++, you might need to [do some personal research](https://en.cppreference.com/w/c) in order to understand this data type.)
 
-* Q3. What does fork return, and how can that information be used?
+* Q3. What does [fork()](https://man7.org/linux/man-pages/man2/fork.2.html) return, and how can that information be used?
 
-* Q4. If exec works as intended, what happens to the process that calls it?
+* Q4. If [exec](https://man7.org/linux/man-pages/man3/exec.3.html) works as intended, what happens to the process that calls it?
 
 * Q5. Do all three functions for shared memory need to be called in every single process after the first? If yes, why? If no, which ones are needed, and why would you not need to call all of them?
 
@@ -120,6 +120,13 @@ Dynamically allocated arrays:
  - I highly recommend that you do not try to create a 2D array in shared memory. 2D dynamic arrays are somewhat weighty to deal with in local memory, let alone shared memory.
  - Do not put your entire swim mill character array in shared memory. There are plenty of implementations that are acceptable, but this is not one of them.
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
+ - While you can have all of these processes run without breaks, it won't lead to very interesting results. It might be worth experimenting with [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html) or [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html) to see what would make your swim mill look more animated. (Think like a game, and frame rates).
+
+## Some miscellanous useful information:
+### Helpful Linux/Unix terminal commands:
+- [touch](https://man7.org/linux/man-pages/man1/touch.1.html)
+- 
+
  
  # previous content
 
