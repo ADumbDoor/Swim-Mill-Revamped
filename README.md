@@ -73,7 +73,7 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 
 ## Timeline
 
-While once again, adherence to this timeline is not graded, you will be on-track if you meet or beat these deadlines:
+While adherence to this timeline is not graded, you will be on-track if you meet or beat these deadlines:
 
 Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
 
