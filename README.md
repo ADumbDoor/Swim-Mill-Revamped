@@ -45,7 +45,7 @@ Your swim mill must also spawn at least 18 pellet processes that run concurrentl
 
 ## What you need to know to succeed
 
-Please read at a *MINIMUM* the following pages. You don't need to be meticulous about your reading, but at a minimum read the information that seems important, and be familiar with the pages. Then, answer the following questions. This is not graded, but knowing the answers to these questions will help you immensely when you actually start to code this assignment:
+Please read at a *MINIMUM* the following pages. You don't need to be meticulous about your reading, but at a minimum read the information that seems important, and be familiar with the pages. Then, answer the following questions. These questions are not graded, but knowing the answers to them will help you immensely when you actually start to code this assignment:
 1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description. You may either use the POSIX shared memory implementation, or the [System V](https://man7.org/linux/man-pages/man2/shmget.2.html) implementation. If you choose to use the System V implementation, please read the pages linked in the [SEE ALSO](https://man7.org/linux/man-pages/man2/shmget.2.html#SEE_ALSO) section of [shmget](https://man7.org/linux/man-pages/man2/shmget.2.html).)
 
 2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
@@ -124,6 +124,7 @@ Dynamically allocated arrays:
  - While you can have all of these processes run without breaks, it won't lead to very interesting results. It might be worth experimenting with [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html) or [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html) to see what would make your swim mill look more animated. (Think like a game, and frame rates).
  - Really put some thought into what you might need to pass as information between processes. Try to think in terms of minimalism here. What is the BARE MINIMUM information my fish needs to know about a pellet to act? Where in my shared memory segment should I put a fish? A pellet? 10 pellets? Etc.
  - If you're having trouble using [srand](https://man7.org/linux/man-pages/man3/srand.3p.html) and [rand](https://man7.org/linux/man-pages/man3/rand.3.html) with multiple processes, meditate upon the following: How much time passes between processes being launched, and how can we introduce additional entropy to our random seed?
+ - Once you have your mill working fully, if you are feeling up to it, I highly recommend looking into [wait](https://man7.org/linux/man-pages/man2/wait.2.html) and [alarm](https://man7.org/linux/man-pages/man2/alarm.2.html). These can handle some of your workload for you.
 
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
