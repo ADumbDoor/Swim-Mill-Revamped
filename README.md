@@ -111,7 +111,12 @@ printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, som
  - I highly recommend that you do not try to create a 2D array in shared memory. 2D dynamic arrays are somewhat weighty to deal with in local memory, let alone shared memory.
  - Do not put your entire swim mill character array in shared memory. There are plenty of implementations that are acceptable, but this is not one of them.
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
+ 
+ # previous content
 
+ # this existed before my edits
+
+ #this is left for comparison only
 
 
 
