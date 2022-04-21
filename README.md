@@ -122,7 +122,7 @@ Dynamically allocated arrays:
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
  - While you can have all of these processes run without breaks, it won't lead to very interesting results. It might be worth experimenting with [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html) or [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html) to see what would make your swim mill look more animated. (Think like a game, and frame rates).
  - Really put some thought into what you might need to pass as information between processes. Try to think in terms of minimalism here. What is the BARE MINIMUM information my fish needs to know about a pellet to act? Where in my shared memory segment should I put a fish? A pellet? 10 pellets? Etc.
- - If you're having trouble using [srand](https://man7.org/linux/man-pages/man3/srand.3p.html) and [rand](https://man7.org/linux/man-pages/man3/rand.3.html) with multiple processes, meditate upon the following: How much time passes between processes being launched, and how can we introduce additional entry to our random seed?
+ - If you're having trouble using [srand](https://man7.org/linux/man-pages/man3/srand.3p.html) and [rand](https://man7.org/linux/man-pages/man3/rand.3.html) with multiple processes, meditate upon the following: How much time passes between processes being launched, and how can we introduce additional entropy to our random seed?
 
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
