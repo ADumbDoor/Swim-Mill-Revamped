@@ -73,7 +73,8 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 
 ## Timeline
 
-While once again, this is not graded, you will be on-track if you adhere to the following timeline.
+While once again, adherence to this timeline is not graded, you will be on-track if you meet or beat these deadlines:
+
 Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
 
 Week 2: All three processes should be able to access shared memory and communicate any information to each other. Ensure that you're using fork and exec properly. You should also be able to spawn all of the required processes at this point.
