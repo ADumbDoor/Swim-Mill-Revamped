@@ -35,14 +35,14 @@ Just printing text descriptions of what's happening is boring. For full credit, 
 
 Your swim mill must also spawn at least 18 pellet processes that run concurrently.
 
-### What you need to know to succeed
+## What you need to know to succeed
 
 Please read at a *MINIMUM* the following pages. You don't need to be meticulous about your reading, but at a minimum read the information that seems important, and be familiar with the pages. Then, answer the following questions. This is not graded, but knowing the answers to these questions will help you immensely when you actually start to code this assignment:
-*	1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description)
-*	2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
-*	3. [exec](https://man7.org/linux/man-pages/man3/exec.3.html) (This has many different functions that do effectively the same thing, but through different means. Pick your favorite.)
-*	4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead)
-*	5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that are called by your first make rule.)
+-	1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description)
+-	2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
+-	3. [exec](https://man7.org/linux/man-pages/man3/exec.3.html) (This has many different functions that do effectively the same thing, but through different means. Pick your favorite.)
+-	4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead)
+-	5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that are called by your first make rule.)
  
 * Q1. In what order should you perform the actions to create [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html)? (HINT: A minimum of three functions must be used the first time you create shared memory)
 
@@ -58,7 +58,7 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 
 * Q7. What kind of information is appropriate to put into shared memory? (Keep in mind that while you can have a decent amount of information in shared memory, it will be static (unchanging) in size, and should not include the kitchen sink)
 
-### Timeline
+## Timeline
 
 While once again, this is not graded, you will be on-track if you adhere to the following timeline.
 Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
@@ -67,8 +67,8 @@ Week 3: You should have figured out what kind of information you need to pass be
 Week 4: You should be able to print a visual representation of your swim mill, all processes should be able to read and write in shared memory, and all of the remaining requirements should be met.
 
 
-### Grading scale:
-## If the code is not commented, there is no makefile, there are no commits to github, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum three source files.
+## Grading scale:
+### If the code is not commented, there is no makefile, there are no commits to github, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum three source files.
 
 10% - Your code compiles and runs
 20% - You created shared memory correctly, and each of your processes is able to read from and write to the shared memory
@@ -79,7 +79,7 @@ Week 4: You should be able to print a visual representation of your swim mill, a
 
 Partial credit may be given based on degree of success for any of the above
 
-### A quick C refresher
+## A quick C refresher
 
 Pointers - A pointer is only an address, on its own it does not contain any information. It must be given memory in some way. This is most often seen with [malloc](https://man7.org/linux/man-pages/man3/free.3.html), or its variations. Until initialized, pointers tend to seg fault when used. The information at the end of pointers is accessed with one of the following:
  - (*myPointer)
@@ -96,7 +96,7 @@ Dynamically allocated arrays:
 printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, someInt, somePointer, someChar);
 
 
-### Recommendations:
+## Recommendations:
  - I highly recommend that you do not try to create a 2D array in shared memory. 2D dynamic arrays are somewhat weighty to deal with in local memory, let alone shared memory.
  - Do not put your entire swim mill character array in shared memory. There are plenty of implementations that are acceptable, but this is not one of them.
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
