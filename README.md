@@ -22,11 +22,9 @@ In addition, you will create a working Makefile, both for my convenience and you
 
 Your different executables (processes) when run will all communicate important information about their states to each other. Our means of communcation will be through a segment of shared memory. Bear in mind that if you do this assignment properly, you will only run ONE of these executables from the terminal, and it will launch all of your other processes.
 
-In order to have all of your processes run concurrently, you will need to be able to both [launch](https://man7.org/linux/man-pages/man3/exec.3.html) and [kill](https://www.man7.org/linux/man-pages/man1/kill.1.html) all of them. To do this, you will need to set up a few things.
-
-Firstly, I should be able to terminate your program at any time *_gracefully_* by sending an [interrupt](https://man7.org/linux/man-pages/man3/siginterrupt.3.html) to your program. (Command/Ctrl + C on most computers, this will appear as a ^C in a terminal).
-
-Secondly, your program should end on its own after 30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
+In order to have all of your processes run concurrently, you will need to be able to both [launch](https://man7.org/linux/man-pages/man3/exec.3.html) and [kill](https://www.man7.org/linux/man-pages/man1/kill.1.html) all of them. To do this, you will need to set up a few things:
+ - I should be able to terminate your program at any time *_gracefully_* by sending an [interrupt](https://man7.org/linux/man-pages/man3/siginterrupt.3.html) to your program. (Command/Ctrl + C on most computers, this will appear as a ^C in a terminal).
+ - Your program should end on its own after 30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
 
 Just printing text descriptions of what's happening is boring. For full credit, print an actual swim mill to the screen. While it is not necessary to implement it *exactly* like this, it should resemble this sort of visual design:
 `----------`
