@@ -27,22 +27,30 @@ Firstly, I should be able to terminate your program at any time *_gracefully_* b
 Secondly, your program should end on its own after 30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
 
 Just printing text descriptions of what's happening is boring. For full credit, print an actual swim mill to the screen. While it is not necessary to implement it *exactly* like this, it should resemble this sort of visual design:
-+ `----------`
-+ `-----*----`
-+ `----------`
-+ `--*-------`
-+ `-----F----`
+`----------`
+
+`-----*----`
+
+`----------`
+
+`--*-------`
+
+`-----F----`
 
 Your swim mill must also spawn at least 18 pellet processes that run concurrently.
 
 ## What you need to know to succeed
 
 Please read at a *MINIMUM* the following pages. You don't need to be meticulous about your reading, but at a minimum read the information that seems important, and be familiar with the pages. Then, answer the following questions. This is not graded, but knowing the answers to these questions will help you immensely when you actually start to code this assignment:
--	1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description)
--	2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
--	3. [exec](https://man7.org/linux/man-pages/man3/exec.3.html) (This has many different functions that do effectively the same thing, but through different means. Pick your favorite.)
--	4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead)
--	5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that are called by your first make rule.)
+1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description)
+
+2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
+
+3. [exec](https://man7.org/linux/man-pages/man3/exec.3.html) (This has many different functions that do effectively the same thing, but through different means. Pick your favorite.)
+
+4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead)
+
+5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that are called by your first make rule.)
  
 * Q1. In what order should you perform the actions to create [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html)? (HINT: A minimum of three functions must be used the first time you create shared memory)
 
@@ -61,10 +69,13 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 ## Timeline
 
 While once again, this is not graded, you will be on-track if you adhere to the following timeline.
-+ Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
-+ Week 2: All three processes should be able to access shared memory and communicate any information to each other. Ensure that you're using fork and exec properly. You should also be able to spawn all of the required processes at this point.
-+ Week 3: You should have figured out what kind of information you need to pass between processes, and have a working implementation of that communication.
-+ Week 4: You should be able to print a visual representation of your swim mill, all processes should be able to read and write in shared memory, and all of the remaining requirements should be met.
+Week 1: Create your makefile, and have your swim mill, pellet, and fish proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to print to stderr.
+
+Week 2: All three processes should be able to access shared memory and communicate any information to each other. Ensure that you're using fork and exec properly. You should also be able to spawn all of the required processes at this point.
+
+Week 3: You should have figured out what kind of information you need to pass between processes, and have a working implementation of that communication.
+
+Week 4: You should be able to print a visual representation of your swim mill, all processes should be able to read and write in shared memory, and all of the remaining requirements should be met.
 
 
 ## Grading scale:
