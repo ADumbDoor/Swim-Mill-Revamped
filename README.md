@@ -3,7 +3,7 @@
 
 ## Assignment Description
 
-The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html), become familiarized with man pages, and improve your abilities to work with low-level operating system commands.
+The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html), become familiarized with man pages, and improve your ability to work with low-level operating system commands.
 
 You will write a program that consists of three entirely separate executables:
 	1. A swim mill
@@ -27,6 +27,7 @@ In order to have all of your processes run concurrently, you will need to be abl
  - Your program should end on its own after 30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
 
 Just printing text descriptions of what's happening is boring. For full credit, print an actual swim mill to the screen. While it is not necessary to implement it *exactly* like this, it should resemble this sort of visual design:
+
 `----------`
 
 `-----*----`
