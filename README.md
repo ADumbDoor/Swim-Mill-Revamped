@@ -87,7 +87,7 @@ Week 4: You should be able to print a visual representation of your swim mill, a
 ## Grading scale:
 ### If the code is not commented, there is no makefile, there are no commits to GitHub, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum three source files. Also, DO NOT compress your files into a .zip or other similar archived format. I will not grade them if they are turned in as such.
 
-+ 10% - Your code compiles and runs, and you have a screenshot (.png or .jpg) of your swim mill running.
++ 10% - Your code compiles and runs, and you have at least one screenshot (.png or .jpg) of your swim mill running.
 + 20% - You created shared memory correctly, and each of your processes is able to read from and write to shared memory
 + 20% - Your program can run 20 separate processes concurrently (this number includes the swim mill itself)
 + 15% - You print the grid correctly and output pellet information correctly
