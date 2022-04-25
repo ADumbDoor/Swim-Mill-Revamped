@@ -89,7 +89,7 @@ Week 4: You should be able to print a visual representation of your swim mill, a
 
 + 10% - Your code compiles and runs, and you have a screenshot (.png or .jpg) of your swim mill running.
 + 20% - You created shared memory correctly, and each of your processes is able to read from and write to shared memory
-+ 20% - You created at least 20 total processes
++ 20% - Your program can run 20 separate processes concurrently (this number includes the swim mill itself)
 + 15% - You print the grid correctly and output pellet information correctly
 + 20% - The program ends after 30 seconds, and can be interrupted with a signal interrupt
 + 15% - The program cleans up after itself, not leaving any shared memory behind
