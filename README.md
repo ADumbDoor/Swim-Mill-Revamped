@@ -13,7 +13,9 @@ You will write a program that consists of three entirely separate executables:
 
 3. A pellet
 
-The `swim mill` keeps track of all of the processes, launches all of them, and is in charge of ending the program after 30 seconds.
+Each of these programs needs to be written in their own respective .c files.
+
+The `swim mill` creates and manages the fish and pellet processes. As the manager, the `swim mill` must ensure that the processes it creates are properly destroyed after use. This includes having the process detach from the shared memory space, and ensuring any left over resources are deallocated. Additionally, when `swim mill` first executes, it should create a timer for 30 seconds. After the time is up, the `swim mill` should end all processes that it created.
 
 The `fish` exists on the bottom row of the swim mill and only moves left and right. It constantly tries to find a pellet, and when it sees one that it believes it can reach, it will try to sit under that pellet until the pellet reaches the fish. If the fish eats a pellet, that pellet is removed from the swim mill. If the fish eats a pellet, please print the pellet's pid to stderr along with an appropriate message. If the fish does not see any pellets, it will sit idly in the center of the bottom row, waiting for pellets.
 
@@ -115,7 +117,9 @@ Dynamically allocated arrays:
 
 `printf("my string: %s, my int: %d, my address: %p, my char: %c", someString, someInt, somePointer, someChar);`
 
-[C-style strings](https://man7.org/linux/man-pages/man3/string.3.html) - C is a more archaic language, and lacks some features that you might be used to, including strings. In C, a string is a char*, or char[] that ends with a literal '\0' character (null-terminator). When printing, if you manually created a char[], and funky stuff happens or you segfault after trying to print using that string, make sure that the very last element is a null-terminator ('\0') character, otherwise your program won't know where the string ends, and might even traverse your entire computer's memory looking for an end.
+[C-style strings](https://man7.org/linux/man-pages/man3/string.3.html) - Compared to more modern programming languages, C is slightly more archaic. Therefore, it lacks some features and convenience that you might be used to, including strings. 
+
+In C, a string is a char*, or char[] that ends with a literal null-termination character (which can be represented by the values '\0' or 'NULL'). When printing, if you manually created a char[], and funky stuff happens or you segfault after trying to print using that string, make sure that the very last element is a null-terminator ('\0') character, otherwise your program won't know where the string ends, and might even traverse your entire computer's memory looking for an end.
 
 ## Recommendations:
  - I highly recommend that you do not try to create a 2D array in shared memory. 2D dynamic arrays are somewhat weighty to deal with in local memory, let alone shared memory.
@@ -130,10 +134,10 @@ Dynamically allocated arrays:
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
 - [touch](https://man7.org/linux/man-pages/man1/touch.1.html) - to create your files
-- [top](https://man7.org/linux/man-pages/man1/top.1.html) - for if you want to see if any errant processes are still running
-- [kill](https://man7.org/linux/man-pages/man1/kill.1.html) - for if you find an errant process running
-- [ipcs](https://man7.org/linux/man-pages/man1/ipcs.1.html) - to check for any shared memory not freed
-- [ipcrm](https://man7.org/linux/man-pages/man1/ipcrm.1.html) - to clear any shared memory left after running your program (this is especially necessary if you're using the System V implementation)
+- [top](https://man7.org/linux/man-pages/man1/top.1.html) - to see if any errant processes are still running
+- [kill](https://man7.org/linux/man-pages/man1/kill.1.html) - to forcefully end an errant process that hasn't properly ended
+- [ipcs](https://man7.org/linux/man-pages/man1/ipcs.1.html) - to check for any shared memory not freed (This is only applicable if you are using the System V shared memory implementation)
+- [ipcrm](https://man7.org/linux/man-pages/man1/ipcrm.1.html) - to clear any shared memory left after running your program (This is especially necessary if you're using the System V implementation)
 ### Useful information if you get stuck:
 - In order to compile on Unix/Linux machines, you may need to specify some compiler flags. Specifically -lrt needs to be near/at the end of your compile commands for working with shared memory.
 - It's worth checking that you have included any headers that you need at the top of your source files. If you find yourself being told that you are using functions implicitly without defining them, this is probably the culprit.
