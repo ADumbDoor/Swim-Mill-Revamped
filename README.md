@@ -4,7 +4,7 @@
 
 The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) and become familiar with both man pages and signal processing.
 
-You will create four processes that work with the same segment of shared memory in order to communicate information. This will be done as an RPG-based game with three characters, a barbarian, a wizard, and a rogue. You will also create a program that is in charge of starting the game and running all of the necessary processes.
+You will create four processes that work with the same segment of shared memory in order to communicate information. This will be done as an RPG-based game with three characters, a barbarian, a wizard, and a rogue. You will also create a program that is in charge of starting the game and running all of the necessary processes. This is required to be done on a POSIX system. If you do not own one, plenty of [virtual machines](https://www.virtualbox.org/) exist for free, and are not terribly difficult to set up.
 
 ## The Three Classes Overview
 
@@ -144,6 +144,9 @@ Dynamically allocated arrays:
 
 ## Recommendations:
  - If your `Rogue` is for some reason not modifying shared memory properly, double-check that you've terminated the process, and that it hasn't crashed. Both can lead to perplexing errors.
+ - If the dungeon is printing '_' characters for your wizard's spell, that means that you used an invalid character. Check your math on your caesar cypher, and make sure that you're wrapping properly and ignoring punctuation correctly.
+ - For the Rogue, try setting **direction** to 't' or a similar unused character every time you set the value in **pick**, and then do not do anything while the character is still 't'.
+ - If you find your program handling one signal fine, and then crashing, try setting up more information in your [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) before registering your signal handling. 
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
  - Remember, commit early, commit often. The deadline can sneak up on you. It's better to have almost everything turned in when the deadline passes than nothing turned in. Just do a commit every time you finish for the day and push it to GitHub and you won't have to worry about this.
 
