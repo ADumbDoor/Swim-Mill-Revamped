@@ -28,6 +28,18 @@ When the Rogue receives a signal (defined in **dungeon_settings.h**), the Rogue 
 
 Every X microseconds, the Dungeon will check the field **pick** in the Rogue struct in shared memory, and will change the **direction** and **locked** fields in Trap accordingly. If the Rogue's pick needs to go up, the trap will set **direction** to 'u'. If the Rogue's pick needs to go down, the trap will set the **direction** to 'd'. If the Rogue's pick is in the right position, the dungeon will set **direction** to '-', and **locked** to false, indicating that the Rogue succeeded in picking the lock. If this occurs, it is counted as success. While this can be done through a brute force search, it can be very elegantly accomplished with a [binary search](#Binary-Search "Goto Binary Search").
 
+## The Game and Dungeon
+
+Please make a `game.c` file and have that be your game's launcher. This should be the code responsible for calling fork and exec. Once you have launched all of your characters, call `RunDungeon` using the pid's of the character classes that you launched. If something isn't set up right, you will likely see an appropriate error.
+
+The Dungeon will be given to you as a .o object file. This can be easily compiled into your code by including it in your compile arguments. Example:
+
+`gcc my_code.c dungeon.o -o my_executable -lrt -pthread`
+
+(Remember that compile command order matters, and that order should be based on dependency. Therefore dungeon.o should probably come after all of your own source files.)
+
+All of your source code files should include "dungeon_info.h" as one of the includes. This contains various information required to make the dungeon work.
+
 ## Shared Memory Overview
 
 This project will require you to be familiar with [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) on Posix systems. It will also require you to handle [Signals](https://man7.org/linux/man-pages/man7/signal.7.html) properly. Since all of this will be done in the C-language, I highly recommend that you brush up on your C practices.
@@ -65,11 +77,24 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 * Q7. How do I determine the size of a struct in bytes?
 
 ## Caesar Cypher
-If you want to know a brief history of the Caesar Cypher, feel free to read the [Wikipedia page](https://en.wikipedia.org/wiki/Caesar_cipher) for a summary. The wikipedia page also offers some formulas that might help reinforce your understanding.
+If you want to know a brief history of the Caesar Cypher, feel free to read the [Wikipedia page](https://en.wikipedia.org/wiki/Caesar_cipher) for a summary. The wikipedia page also offers some formulas and examples that might help reinforce your understanding.
 
-In C, characters are represented as chars, which are typically one byte of memory. They also have a numerical value, 
-![Ascii Table](https://www.asciitable.com/asciifull.gif "An Ascii Table").
+In C, characters are represented as chars, which are typically one byte of memory. They also have a numerical value, such as 65 for 'A', 90 for 'Z', 97 for 'a', and 122 for 'z'. A full list of values can be seen here:
+![ASCII Table](https://www.asciitable.com/asciifull.gif "An ASCII Table").
 
+We can utilize this in order to both encrypt and decrypt information using a Caesar Cypher. While Caesar Cyphers are not cryptographically secure, they are a nice introduction to the idea of data obfuscation. For the purposes of this assignment, the **Barrier** struct contains a field called **spell**. This is a char array of a size determined in the **dungeon_settings.h** file. Every alphabetical character that is put into the **Barrier**'s **spell** field will use the first character in the array as the shift value. So for example, if the first character were 'T', it would represent a shift of 84.
+
+Notice that in that example the value of 84 > 26, and thus the shift would be greater than the number of characters in the alphabet. You will have to "roll" the numbers using modulo in order to keep them within the same alphabet. Capitalization will remain consistent. If a character in the **spell** field is capitalized, it will also be capitalized in the final answer. If it is lower case, it will be lower case in the final answer. Punctuation and spaces do not need to be modified at all.
+
+## Binary Search
+
+For a more detailed read on Binary Search, feel free to peruse the [Wikipedia article](https://en.wikipedia.org/wiki/Binary_search_algorithm).
+
+A Binary Search in Computer Science is an algorithm that splits a list in half, and then checks if the desired element is above or below the current position. It then splits that list in half, and repeats the previous step until the element is found. While this is usually used to traverse an array to find a list element, this formula can also be utilized to find a floating point value. This is how we will utilize it.
+
+Our Dungeon will pick a random value between 0 and the value **MAX_PICK_ANGLE** defined in **dungeon_settings.h**. It is then up to our Rogue to guess that value. To do this, start by picking a value halfway between 0 and **MAX_PICK_ANGLE**, and put that in the **Rogue**'s **pick** field. The dungeon will put a value in **Trap**'s **direction** field to indicate whether the position is above or below the current **pick** value. (HINT: I recommend setting the value in **direction** to something like 't' after modifying your **pick** value so that you can tell when the value has changed. Otherwise it can be difficult to tell if you need to adjust your position or not.)
+
+When the pick is within the threshold defined by **LOCK_THRESHOLD** in **dungeon_settings.h**, the dungeon will place a '-' character in **direction**. Use this information to tell the Rogue to stop searching for new values.
 
 ## Timeline
 
@@ -127,8 +152,6 @@ Dynamically allocated arrays:
 - [touch](https://man7.org/linux/man-pages/man1/touch.1.html) - to create your files
 - [htop](https://man7.org/linux/man-pages/man1/htop.1.html) - for if you want to see if any errant processes are still running
 - [kill](https://man7.org/linux/man-pages/man1/kill.1.html) - for if you find an errant process running
-- [ipcs](https://man7.org/linux/man-pages/man1/ipcs.1.html) - to check for any shared memory not freed
-- [ipcrm](https://man7.org/linux/man-pages/man1/ipcrm.1.html) - to clear any shared memory left after running your program (this is especially necessary if you're using the System V implementation)
 ### Useful information if you get stuck:
 - In order to compile on Unix/Linux machines, you may need to specify some compiler flags. Specifically -lrt needs to be near/at the end of your compile commands for working with shared memory.
 - It's worth checking that you have included any headers that you need at the top of your source files. If you find yourself being told that you are using functions implicitly without defining them, this is probably the culprit.
