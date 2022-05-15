@@ -26,7 +26,7 @@ The Rogue is probably the last class that you should make. The Rogue works as fo
 
 When the Rogue receives a signal (defined in **dungeon_settings.h**), the Rogue will attempt to guess a float value to "pick" a lock. The Trap struct has a char for direction, and a boolean for locked. This puzzle is a little unique. The Dungeon will wait for a total amount of time defined in **dungeon_settings.h** as **SECONDS_TO_PICK**, but will check the value of the Rogue's current pick position using **TIME_BETWEEN_ROGUE_TICKS**. Notice that these two values are quite different, and that is because one of them uses [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html), and the other [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html). I recommend that you follow a similar example.
 
-Every X microseconds, the Dungeon will check the field **pick** in the Rogue struct in shared memory, and will change the **direction** and **locked** fields in Trap accordingly. If the Rogue's pick needs to go up, the trap will set **direction** to 'u'. If the Rogue's pick needs to go down, the trap will set the **direction** to 'd'. If the Rogue's pick is in the right position, the dungeon will set **direction** to '-', and **locked** to false, indicating that the Rogue succeeded in picking the lock. If this occurs, it is counted as success.
+Every X microseconds, the Dungeon will check the field **pick** in the Rogue struct in shared memory, and will change the **direction** and **locked** fields in Trap accordingly. If the Rogue's pick needs to go up, the trap will set **direction** to 'u'. If the Rogue's pick needs to go down, the trap will set the **direction** to 'd'. If the Rogue's pick is in the right position, the dungeon will set **direction** to '-', and **locked** to false, indicating that the Rogue succeeded in picking the lock. If this occurs, it is counted as success. While this can be done through a brute force search, it can be very elegantly accomplished with a [binary search](#Binary-Search "Goto Binary Search").
 
 ## Shared Memory Overview
 
@@ -64,9 +64,11 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 
 * Q7. How do I determine the size of a struct in bytes?
 
-
 ## Caesar Cypher
+If you want to know a brief history of the Caesar Cypher, feel free to read the [Wikipedia page](https://en.wikipedia.org/wiki/Caesar_cipher) for a summary. The wikipedia page also offers some formulas that might help reinforce your understanding.
 
+In C, characters are represented as chars, which are typically one byte of memory. They also have a numerical value, 
+![Ascii Table](https://www.asciitable.com/asciifull.gif "An Ascii Table").
 
 
 ## Timeline
