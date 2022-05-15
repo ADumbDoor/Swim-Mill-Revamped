@@ -18,7 +18,7 @@ When the Barbarian receives a signal (defined in **dungeon_settings.h**), the Ba
 
 The Wizard is probably the second class that you should make. The Wizard works as follows:
 
-When the Wizard receives a signal (defined in **dungeon_settings.h**), the Wizard reads the *Caesar Cypher* placed in the Barrier's **spell** field. The Wizard then decodes the [*Caesar Cypher*](##Caesar-Cypher "Goto Caesar Cypher"), using the first character as the key, and copies the decoded message into the Wizard's **spell** field. The Dungeon will wait an amount of time defined in dungeon_settings.h as **SECONDS_TO_GUESS_BARRIER** for the decoding process to complete. If the Wizard's **spell** field matches the decoded message after the Dungeon has finished waiting, then this will count as success.
+When the Wizard receives a signal (defined in **dungeon_settings.h**), the Wizard reads the *Caesar Cypher* placed in the Barrier's **spell** field. The Wizard then decodes the [*Caesar Cypher*](#Caesar-Cypher "Goto Caesar Cypher"), using the first character as the key, and copies the decoded message into the Wizard's **spell** field. The Dungeon will wait an amount of time defined in dungeon_settings.h as **SECONDS_TO_GUESS_BARRIER** for the decoding process to complete. If the Wizard's **spell** field matches the decoded message after the Dungeon has finished waiting, then this will count as success.
 
 ### The Rogue
 
