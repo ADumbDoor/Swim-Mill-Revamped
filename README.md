@@ -1,58 +1,51 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7278570&assignment_repo_type=AssignmentRepo)
 # CECS 326 Lab 2: Concurrent Processing and Shared Memory
 
-## Assignment Description:
+## Assignment Description
 
-The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html), become familiarized with man pages, and improve your ability to work with low-level operating system commands.
+The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) and become familiar with both man pages and signal processing.
 
-You will write a program that consists of three entirely separate executables:
+You will create four processes that work with the same segment of shared memory in order to communicate information. This will be done as an RPG-based game with three characters, a barbarian, a wizard, and a rogue. You will also create a program that is in charge of starting the game and running all of the necessary processes.
 
-1. A swim mill
+## The Three Classes Overview
 
-2. A fish
+### The Barbarian
 
-3. A pellet
+The Barbarian is the first character class that you should probably make. The Barbarian works as follows: 
 
-The `swim mill` keeps track of all of the processes, launches all of them, and is in charge of ending the program after 30 seconds.
+When the Barbarian receives a signal (defined in **dungeon_settings.h**), the Barbarian copies the integer in the enemy's **health** field into the **attack** field. Use **dungeon_info.h** to see how the **Dungeon** struct is set up. The Dungeon will then wait an amount of time defined in dungeon_settings.h as **SECONDS_TO_ATTACK**. If the integer in **attack** matches the integer in **health**, then this will count as success.
 
-The `fish` exists on the bottom row of the swim mill and only moves left and right. It constantly tries to find a pellet, and when it sees one that it believes it can reach, it will try to sit under that pellet until the pellet reaches the fish. If the fish eats a pellet, that pellet is removed from the swim mill. If the fish eats a pellet, please print the pellet's pid to stderr along with an appropriate message. If the fish does not see any pellets, it will sit idly in the center of the bottom row, waiting for pellets.
+### The Wizard
 
-The `pellet` spawns at a random X and Y location in the swim mill (Although never on the same row as the fish). Every tick, it goes down one row. If it reaches the bottom of the swim mill, it is removed from the swim mill. [Print](https://man7.org/linux/man-pages/man3/perror.3p.html) an appropriate message to [stderr](https://man7.org/linux/man-pages/man3/stdout.3.html) with the pellet's [pid](https://man7.org/linux/man-pages/man2/getpid.2.html). You may choose to respawn the pellet after an arbitrary amount of time has passed from it being eaten or reaching the bottom of the swim mill.
+The Wizard is probably the second class that you should make. The Wizard works as follows:
 
- * HINT: If you have only one .c file, and not at least three, you will need to change your paradigm by the end.
+When the Wizard receives a signal (defined in **dungeon_settings.h**), the Wizard reads the *Caesar Cypher* placed in the Barrier's **spell** field. The Wizard then decodes the [*Caesar Cypher*](##Caesar-Cypher "Goto Caesar Cypher"), using the first character as the key, and copies the decoded message into the Wizard's **spell** field. The Dungeon will wait an amount of time defined in dungeon_settings.h as **SECONDS_TO_GUESS_BARRIER** for the decoding process to complete. If the Wizard's **spell** field matches the decoded message after the Dungeon has finished waiting, then this will count as success.
 
-In addition, you will create a working [makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/), both for my convenience and your own. Ideally you should only type your cc/gcc commands ONCE for this entire project, and only inside of your [makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/). After that, you should only need to type "make" into your terminal to compile all three executables.
+### The Rogue
 
-Your different executables (processes) when run will all communicate important information about their states to each other. Our means of communication will be through a segment of shared memory. Bear in mind that if you do this assignment properly, you will only run ONE of these executables from the terminal, and it will launch all of your other processes.
+The Rogue is probably the last class that you should make. The Rogue works as follows:
 
-In order to have all of your processes run concurrently, you will need to be able to both [launch](https://man7.org/linux/man-pages/man3/exec.3.html) and [kill](https://www.man7.org/linux/man-pages/man1/kill.1.html) all of them. To do this, you will need to set up a couple of things:
- - I should be able to terminate your program at any time *_gracefully_* by sending an [interrupt](https://man7.org/linux/man-pages/man3/siginterrupt.3.html) to your program. (Command/Ctrl + C on most computers, this will appear as a ^C in a terminal). I do recommend leaving this step for last, however, as until your program is able to handle interrupts cleanly, interrupting in this way may lead to unintended and possibly unpleasant results (Namely, abandoned shared memory, or processes still running in the background).
- - Your program should end on its own after ~30 seconds. The methods for doing this range from silly to elegant, but as long as it ends after approximately 30 seconds without leaving any processes still running, or shared memory segments hanging around, this requirement will be fulfilled.
+When the Rogue receives a signal (defined in **dungeon_settings.h**), the Rogue will attempt to guess a float value to "pick" a lock. The Trap struct has a char for direction, and a boolean for locked. This puzzle is a little unique. The Dungeon will wait for a total amount of time defined in **dungeon_settings.h** as **SECONDS_TO_PICK**, but will check the value of the Rogue's current pick position using **TIME_BETWEEN_ROGUE_TICKS**. Notice that these two values are quite different, and that is because one of them uses [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html), and the other [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html). I recommend that you follow a similar example.
 
-Just printing text descriptions of what's happening is boring. For full credit, print an actual swim mill to the screen. While it is not necessary to implement it *exactly* like this, it should resemble this sort of visual design:
+Every X microseconds, the Dungeon will check the field **pick** in the Rogue struct in shared memory, and will change the **direction** and **locked** fields in Trap accordingly. If the Rogue's pick needs to go up, the trap will set **direction** to 'u'. If the Rogue's pick needs to go down, the trap will set the **direction** to 'd'. If the Rogue's pick is in the right position, the dungeon will set **direction** to '-', and **locked** to false, indicating that the Rogue succeeded in picking the lock. If this occurs, it is counted as success.
 
-`----------`
+## Shared Memory Overview
 
-`-----*----`
+This project will require you to be familiar with [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) on Posix systems. It will also require you to handle [Signals](https://man7.org/linux/man-pages/man7/signal.7.html) properly. Since all of this will be done in the C-language, I highly recommend that you brush up on your C practices.
 
-`----------`
+For the purposes of this assignment, only store the **Dungeon** struct in shared memory. Not any of the other structs. If you set it up properly, adjusting one value from one process in shared memory will adjust it for all processes in shared memory.
 
-`--*-------`
+# Assignment Details
 
-`-----F----`
-
-Your swim mill must also spawn at least 18 pellet processes that run concurrently. When you've got all that working, please also add a screenshot of your swim mill running as either a .jpg or a .png file.
-
-## What you need to know to succeed:
+## Required Reading
 
 Please read at a *MINIMUM* the following pages. You don't need to be meticulous about your reading, but at a minimum read the information that seems important, and be familiar with the pages. Then, answer the following questions. These questions are not graded, but knowing the answers to them will help you immensely when you actually start to code this assignment:
-1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description. You may either use the POSIX shared memory implementation, or the [System V](https://man7.org/linux/man-pages/man2/shmget.2.html) implementation. If you choose to use the System V implementation, please read the pages linked in the [SEE ALSO](https://man7.org/linux/man-pages/man2/shmget.2.html#SEE_ALSO) section of [shmget](https://man7.org/linux/man-pages/man2/shmget.2.html).)
+1. [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) (and its related pages, at least the first three in the description.
 
 2. [fork()](https://man7.org/linux/man-pages/man2/fork.2.html)
 
 3. [exec](https://man7.org/linux/man-pages/man3/exec.3.html) (This has many different functions that do effectively the same thing, but through different means. Pick your favorite.)
 
-4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead.)
+4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead, but I highly recommend the prior one.)
 
 5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that run by calling your first make rule. [More on that here](https://makefiletutorial.com/#targets).)
 
@@ -67,32 +60,37 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 
 * Q5. Do all three functions for shared memory need to be called in every single process after the first? If yes, why? If no, which ones are needed, and why would you not need to call all of them?
 
-* Q6. If I have a pointer, what happens if I increment/decrement the pointer itself? What even is a pointer? How can I use it? Is there any difference between incrementing a char pointer and an int pointer?
+* Q6. What does a [struct](https://en.cppreference.com/w/c/language/struct) look like in memory, and if I store a struct in shared memory, how do I access its various fields?
 
-* Q7. What kind of information is appropriate to put into shared memory? (Keep in mind that while you can have a decent amount of information in shared memory, the size of your shared memory segment is static (unchanging), and should not include the kitchen sink.)
+* Q7. How do I determine the size of a struct in bytes?
 
-## Timeline:
 
-While adherence to this timeline is not graded, you will be on-track if you meet or beat these deadlines:
+## Caesar Cypher
 
-Week 1: Create your makefile, and have your `swim mill`, `pellet`, and `fish` proccesses able to be compiled. They don't need to be finished yet, but at least have them in a runnable state. Also have some infrastructure in place to [print](https://man7.org/linux/man-pages/man3/perror.3p.html) to [stderr](https://man7.org/linux/man-pages/man3/stdout.3.html).
 
-Week 2: All three processes should be able to access [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) and communicate some form of meaningful information to each other. Ensure that you're using [fork](https://man7.org/linux/man-pages/man2/fork.2.html) and [exec](https://man7.org/linux/man-pages/man3/exec.3.html) properly. You should also be able to spawn all of the required processes at this point.
 
-Week 3: You should have figured out what kind of information you need to pass between processes, and have a working implementation of that communication. *HINT: Think deeply about what data type(s) you want to use, and how you'll organize them in shared memory.*
+## Timeline
 
-Week 4: You should be able to print a visual representation of your swim mill, all processes should be able to read and write in shared memory, and all of the remaining requirements should be met.
+While adherence to this timeline is not graded, you will be on-track if you meet or beat these deadlines. If you have not finished one of these deadlines by the time given, please come visit me in my office hours, or at least send me an e-mail if you're having trouble understanding the assignment. Remember: I'm here to help. Be curious, and don't wait until the last second to do this assignment. Trust me on this.
 
+Week 1: Create your makefile, and have your `game`, `barbarian`, `wizard`, and `rogue` processes able to be compiled. They don't need to be finished yet, but they need to exist in a runnable state. The Dungeon will not run properly unless three separate processes have been started, and are running by the time the Dungeon is started.
+
+Week 2: All of your processes should be able to access [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) and interpret the data that matters to them. Ensure that you're using [fork](https://man7.org/linux/man-pages/man2/fork.2.html) and [exec](https://man7.org/linux/man-pages/man3/exec.3.html) properly. Even if all of your processes don't fully work yet, they should all be runnable, and they should exist until they are terminated.
+
+Week 3: Your `barbarian` process should be 100% functional, and your `wizard` and `rogue` processes should work at least to some degree. Every process should be able to receive a signal without crashing, and every process should be able to do something with shared memory when they receive a signal. Please also ensure that you're cleaning up after yourself by this point. Clean up your shared memory, terminate your processes properly, etc.
+
+Week 4: Every process should be successful in running. If you're not getting a near 100% success rate, please see me in my office hours to try and figure out what might be going wrong. A failure once in a blue moon is nothing to worry about.
 
 ## Grading scale:
-### If the code is not commented, there is no makefile, there are no commits to GitHub, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum three source files. Also, DO NOT compress your files into a .zip or other similar archived format. I will not grade them if they are turned in as such.
+### If the code is not commented, there is no makefile, there are no commits to GitHub, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum four source files. Also, DO NOT compress your files into a .zip or other similar archived format. I will not grade them if they are turned in as such.
 
-+ 10% - Your code compiles and runs, and you have at least one screenshot (.png or .jpg) of your swim mill running.
-+ 20% - You created shared memory correctly, and each of your processes is able to read from and write to shared memory
-+ 20% - Your program can run 20 separate processes concurrently (this number includes the swim mill itself)
-+ 15% - You print the grid correctly and output pellet information correctly
-+ 20% - The program ends after 30 seconds, and can be interrupted with a signal interrupt
-+ 15% - The program cleans up after itself, not leaving any shared memory behind
+Points | Requirement
+------ | -----------
+10     | Your code compiles and runs successfully, and you have followed the rules.
+10     | You successfully created and managed shared memory
+5      | All of your processes run concurrently, and they can all access shared memory.
+5      | Your processes do not crash upon receiving signals, or through regular use.
+10     | 1 point for every successful run of the dungeon. I will run each character twice, followed by four random runs for up to 10 points.
 
 Partial credit may be given based on degree of success for any of the above
 
@@ -118,19 +116,14 @@ Dynamically allocated arrays:
 [C-style strings](https://man7.org/linux/man-pages/man3/string.3.html) - C is a more archaic language, and lacks some features that you might be used to, including strings. In C, a string is a char*, or char[] that ends with a literal '\0' character (null-terminator). When printing, if you manually created a char[], and funky stuff happens or you segfault after trying to print using that string, make sure that the very last element is a null-terminator ('\0') character, otherwise your program won't know where the string ends, and might even traverse your entire computer's memory looking for an end.
 
 ## Recommendations:
- - I highly recommend that you do not try to create a 2D array in shared memory. 2D dynamic arrays are somewhat weighty to deal with in local memory, let alone shared memory.
- - Do not put your entire swim mill as a character array in shared memory. There are plenty of implementations that are acceptable, but this is not one of them. (To clarify, chars in your shared memory are okay, but you shouldn't be passing your entire shared memory to printf or the like.)
+ - If your `Rogue` is for some reason not modifying shared memory properly, double-check that you've terminated the process, and that it hasn't crashed. Both can lead to perplexing errors.
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
- - While you can have all of these processes run without breaks, it won't lead to very interesting results. It might be worth experimenting with [sleep](https://man7.org/linux/man-pages/man3/sleep.3.html) or [usleep](https://man7.org/linux/man-pages/man3/usleep.3.html) to see what would make your swim mill look more animated. (Think like a game, and frame rates.)
- - Really put some thought into what you might need to pass as information between processes. Try to think in terms of minimalism here. What is the BARE MINIMUM information my fish needs to know about a pellet to act? Where in my shared memory segment should I put a fish? A pellet? 10 pellets? Etc.
- - If you're having trouble using [srand](https://man7.org/linux/man-pages/man3/srand.3p.html) and [rand](https://man7.org/linux/man-pages/man3/rand.3.html) with multiple processes, meditate upon the following: How much time passes between processes being launched, and how can we introduce additional entropy to our random seed?
- - Once you have your mill working fully, if you are feeling up to it, I highly recommend looking into [wait](https://man7.org/linux/man-pages/man2/wait.2.html) and [alarm](https://man7.org/linux/man-pages/man2/alarm.2.html). These can handle some of your workload for you.
  - Remember, commit early, commit often. The deadline can sneak up on you. It's better to have almost everything turned in when the deadline passes than nothing turned in. Just do a commit every time you finish for the day and push it to GitHub and you won't have to worry about this.
 
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
 - [touch](https://man7.org/linux/man-pages/man1/touch.1.html) - to create your files
-- [top](https://man7.org/linux/man-pages/man1/top.1.html) - for if you want to see if any errant processes are still running
+- [htop](https://man7.org/linux/man-pages/man1/htop.1.html) - for if you want to see if any errant processes are still running
 - [kill](https://man7.org/linux/man-pages/man1/kill.1.html) - for if you find an errant process running
 - [ipcs](https://man7.org/linux/man-pages/man1/ipcs.1.html) - to check for any shared memory not freed
 - [ipcrm](https://man7.org/linux/man-pages/man1/ipcrm.1.html) - to clear any shared memory left after running your program (this is especially necessary if you're using the System V implementation)
@@ -139,3 +132,16 @@ Dynamically allocated arrays:
 - It's worth checking that you have included any headers that you need at the top of your source files. If you find yourself being told that you are using functions implicitly without defining them, this is probably the culprit.
 - Order of function definitions matters in C. You can get around this, however, by *declaring* functions before using them. [More on that here](https://en.cppreference.com/w/c/language/functions). This is where a header file might come in handy.
 - If the implementation part of this seems a bit general, and open to interpretation, that's because it is. As computer scientists and engineers, I expect you to have some level of problem solving skills and the ability to research problems to find solutions. While I have certainly given you plenty of links to get you started, this is far from all of the information you will need to know in order to get a 100% in this lab. Be curious, ask questions, hypothesize and test. That's the *science* part of Computer Science.
+
+## Deliverables
+
+I will require the following items for grading:
+
+* Your `*.c` source code files
+* Your *makefile*
+* At least one screenshot of your executed code, in `*.png` or `*.jpg` format
+
+Submit your files through your git repository. Your submission must follow the following rules, else *I will not grade it and you will receive a zero for the submission*:
+
+* Do not use compression on your files
+* Make sure that all significant code is *commented* with your own explanations
