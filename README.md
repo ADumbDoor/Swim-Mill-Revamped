@@ -4,7 +4,9 @@
 
 The goal of this assignment is to become familiar with concurrent processing in Unix/Linux using [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) and become familiar with both man pages and signal processing.
 
-You will create four processes that work with the same segment of shared memory in order to communicate information. This will be done as an RPG-based game with three characters, a barbarian, a wizard, and a rogue. You will also create a program that is in charge of starting the game and running all of the necessary processes. This is required to be done on a POSIX system. If you do not own one, plenty of [virtual machines](https://www.virtualbox.org/) exist for free, and are not terribly difficult to set up.
+You will create four processes that work with the same segment of shared memory in order to communicate information. This will be done as an RPG-based game with three characters: a barbarian, a wizard, and a rogue. You will also create a program that is in charge of starting the game and running all of the necessary processes. This is required to be done on a POSIX system. If you do not own one, plenty of [virtual machines](https://www.virtualbox.org/) exist for free, and are not terribly difficult to set up.
+
+Finally, the last stage of this assignment is to become familiar with semaphores. As the last stage of the dungeon, semaphores will be used to "hold" open a door (remember the down(&mutex) and up(&mutex) from lecture) and allow your party to get the treasure inside. The "treasure" earns more than just gold for your characters, though. It earns you points!
 
 ## The Three Classes Overview
 
@@ -46,6 +48,16 @@ This project will require you to be familiar with [shared memory](https://man7.o
 
 For the purposes of this assignment, only store the **Dungeon** struct in shared memory. Not any of the other structs. If you set it up properly, adjusting one value from one process in shared memory will adjust it for all processes in shared memory.
 
+## Semaphore Overview
+
+After your characters have successfully arrived at the end of the dungeon,  they will have one final challenge. The treasure room door must be held open by two party members in order to let the Rogue in to get the treasure! It doesn't matter which party member holds which lever, only that both levers are held down by two separate party members long enough for the Rogue to get all of the treasure. The last four points will be for releasing the [semaphores](https://man7.org/linux/man-pages/man7/sem_overview.7.html) after the Rogue leaves the treasure room. Appropriate methods will be declared, and the names of the [semaphores](https://man7.org/linux/man-pages/man7/sem_overview.7.html) will be given in the **dungeon_info.h** file. We will be using the Named Semaphores defined in [sem_overview](https://man7.org/linux/man-pages/man7/sem_overview.7.html). Be sure to read the definitions for [sem_post](https://man7.org/linux/man-pages/man3/sem_post.3.html) and [sem_wait](https://man7.org/linux/man-pages/man3/sem_wait.3.html), remembering that in this case, "holding" the door for the Rogue here would be preventing the dungeon from accessing the room while the Rogue gets the treasure. This is the final part of this assignment that is graded, so make sure everything else works first before tackling this!
+
+The dungeon will send a new signal, defined in **dungeon_settings.h** as `SEMAPHORE_SIGNAL`. Make sure that your classes can handle it without crashing! After your Rogue gets all four letters from the "treasure" field, copy them into the "spoils" field of the Dungeon, and release the semaphores. Note: The treasure field will only give one character at a time, and it will pause between adding additional characters. It will also not be null terminated, so make sure you plan around tackling that problem!
+
+Once the Rogue has gotten all of the treasure, it is up to you how you want to handle re-opening the semaphores. Do you want the Wizard and Barbarian to wait until the Rogue has four characters in the `spoils` field, and then immediately release the door? Do you want the Rogue to send a signal to the Wizard and Barbarian to release the door? This part is up to you to figure out. By now, if you've gotten this far, you should have at least one or two ideas of how to tackle this.
+
+Note: Your semaphores should be created before you call `RunDungeon`. Also, the `treasure` and `spoils` fields will be initialized to null terminators before their values are used. This can be useful to note.
+
 # Assignment Details
 
 ## Required Reading
@@ -60,6 +72,8 @@ Please read at a *MINIMUM* the following pages. You don't need to be meticulous 
 4. [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) (You may choose to use [signal](https://man7.org/linux/man-pages/man7/signal.7.html) instead, but I highly recommend the prior one.)
 
 5. [Makefile](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/) (You are only required to make a Makefile that uses what you learn up to the first Makefile iteration, but it is worth a read to go a bit further. You may either use multiple gcc compile commands in your first make rule, or you may create multiple make rules that run by calling your first make rule. [More on that here](https://makefiletutorial.com/#targets).)
+
+6. [Semaphores](https://man7.org/linux/man-pages/man7/sem_overview.7.html) (Be very familiar with what posting versus waiting does.)
 
 ### questions you should answer: 
 * Q1. In what order should you perform the actions to create [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html)? (HINT: A minimum of three functions must be used the first time you create shared memory.)
@@ -90,7 +104,7 @@ Notice that in that example the value of 84 > 26, and thus the shift would be gr
 
 For a more detailed read on Binary Search, feel free to peruse the [Wikipedia article](https://en.wikipedia.org/wiki/Binary_search_algorithm).
 
-A Binary Search in Computer Science is an algorithm that splits a list in half, and then checks if the desired element is above or below the current position. It then splits that list in half, and repeats the previous step until the element is found. While this is usually used to traverse an array to find a list element, this formula can also be utilized to find a floating point value. This is how we will utilize it.
+A Binary Search in Computer Science is an algorithm that splits a list in half, and then checks if the desired element is above or below the current position. It then splits that list in half, and repeats the previous steps until the element is found. While this is usually used to traverse an array to find a list element, this formula can also be utilized to find a floating point value. This is how we will utilize it.
 
 Our Dungeon will pick a random value between 0 and the value **MAX_PICK_ANGLE** defined in **dungeon_settings.h**. It is then up to our Rogue to guess that value. To do this, start by picking a value halfway between 0 and **MAX_PICK_ANGLE**, and put that in the **Rogue**'s **pick** field. The dungeon will put a value in **Trap**'s **direction** field to indicate whether the position is above or below the current **pick** value. (HINT: I recommend setting the value in **direction** to something like 't' after modifying your **pick** value so that you can tell when the value has changed. Otherwise it can be difficult to tell if you need to adjust your position or not.)
 
@@ -104,11 +118,12 @@ Week 1: Create your makefile, and have your `game`, `barbarian`, `wizard`, and `
 
 Week 2: All of your processes should be able to access [shared memory](https://man7.org/linux/man-pages/man7/shm_overview.7.html) and interpret the data that matters to them. Ensure that you're using [fork](https://man7.org/linux/man-pages/man2/fork.2.html) and [exec](https://man7.org/linux/man-pages/man3/exec.3.html) properly. Even if all of your processes don't fully work yet, they should all be runnable, and they should exist until they are terminated.
 
-Week 3: Your `barbarian` process should be 100% functional, and your `wizard` and `rogue` processes should work at least to some degree. Every process should be able to receive a signal without crashing, and every process should be able to do something with shared memory when they receive a signal. Please also ensure that you're cleaning up after yourself by this point. Clean up your shared memory, terminate your processes properly, etc.
+Week 3: Your `barbarian` process should be 100% functional, and your `wizard` and `rogue` processes should work at least to some degree. Every process should be able to receive a signal without crashing, and every process should be able to do something with shared memory when they receive a signal. Please also ensure that you're cleaning up after yourself by this point. Clean up your shared memory, terminate your processes properly, etc. A field, `running` exists in the dungeon to help with this. If dungeon->running == false, all processes should be terminated. (I recommend including in all of your while loops a condition to exit if this `running` field becomes false at any point.)
 
-Week 4: Every process should be successful in running. If you're not getting a near 100% success rate, please see me in my office hours to try and figure out what might be going wrong. A failure once in a blue moon is nothing to worry about.
+Week 4: Every process should be successful in running. If you're not getting a near 100% success rate, please see me in my office hours to try and figure out what might be going wrong. A failure once in a blue moon is nothing to worry about. Finally, your semaphores should be set up by now.
 
 ## Grading scale:
+
 ### If the code is not commented, there is no makefile, there are no commits to GitHub, or there are no source files, this is an automatic zero. You must have comments, you must have a Makefile, you must commit the assignment to GitHub, and you must have at minimum four source files. Also, DO NOT compress your files into a .zip or other similar archived format. I will not grade them if they are turned in as such.
 
 Points | Requirement
@@ -118,8 +133,9 @@ Points | Requirement
 5      | All of your processes run concurrently, and they can all access shared memory.
 5      | Your processes do not crash upon receiving signals, or through regular use.
 10     | 1 point for every successful run of the dungeon. I will run each character twice, followed by four random runs for up to 10 points.
+20     | 4 points for holding down the semaphores correctly for up to four ticks, for 16 points. Then, you must release your semaphores to receive the last four points.
 
-Partial credit may be given based on degree of success for any of the above
+Partial credit may be given based on degree of success for any of the above, and additional points may be deducted in rare cases of completely disregarding the point of the directions. (Bear in mind, it's okay to experiment and have odd solutions, but if you do something along the lines of just guessing random phrases for the Wizard, for example, or by using length to calculate which phrase it is, this is grounds for points being lost. As long as your solution keeps within the spirit of the assignment, you shouldn't have to worry about this.)
 
 ## A quick C refresher:
 
@@ -146,9 +162,10 @@ Dynamically allocated arrays:
  - If your `Rogue` is for some reason not modifying shared memory properly, double-check that you've terminated the process, and that it hasn't crashed. Both can lead to perplexing errors.
  - If the dungeon is printing '_' characters for your wizard's spell, that means that you used an invalid character. Check your math on your caesar cypher, and make sure that you're wrapping properly and ignoring punctuation correctly.
  - For the Rogue, try setting **direction** to 't' or a similar unused character every time you set the value in **pick**, and then do not do anything while the character is still 't'.
- - If you find your program handling one signal fine, and then crashing, try setting up more information in your [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) before registering your signal handling. 
+ - If you find your program handling one signal fine, and then crashing, try setting up more information in your [sigaction](https://man7.org/linux/man-pages/man2/sigaction.2.html) before registering your signal handling. You might need to set the restart flag.
  - Do not wait to start working. Sleep clears your mental state and allows you to look at your code with a fresh mind. You will likely need to refactor this assignment two or three times at least. This takes time, and is best not left until the day before the assignment is due.
  - Remember, commit early, commit often. The deadline can sneak up on you. It's better to have almost everything turned in when the deadline passes than nothing turned in. Just do a commit every time you finish for the day and push it to GitHub and you won't have to worry about this.
+ - Be good friends with sleep and usleep. These functions force your process to relinquish some time, and this might sometimes be necessary to play nicely with other processes, including the dungeon! Remember: If you're using multiple processes, and you want to let another one run, just do a quick usleep.
 
 ## Some miscellanous useful information:
 ### Helpful Linux/Unix terminal commands:
