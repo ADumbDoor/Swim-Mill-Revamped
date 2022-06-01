@@ -1,0 +1,7 @@
+# Git stuff
+
+# MacOS Stuff
+.DS_Store
+
+# tmp files
+*.tmp
